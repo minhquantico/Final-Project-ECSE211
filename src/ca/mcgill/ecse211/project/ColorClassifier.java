@@ -33,7 +33,7 @@ public class ColorClassifier {
 
       lcd.clear();
       
-      color.fetchSample(colorSample, 0);      
+      color.fetchSample(colorSample, 0); 
       
       RingColor ringColor = classifyColor();
       if (ringColor != RingColor.UNKNOWN) {

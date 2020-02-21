@@ -86,6 +86,12 @@ public class Resources {
   public static EV3ColorSensor frontColorSensor = new EV3ColorSensor(SensorPort.S2);
   
   /**
+   * Side color sensors
+   */
+  public static EV3ColorSensor sideColorSensor1 = new EV3ColorSensor(SensorPort.S3);
+  public static EV3ColorSensor sideColorSensor2 = new EV3ColorSensor(SensorPort.S4);
+  
+  /**
    * The left motor.
    */
   public static final EV3LargeRegulatedMotor leftMotor = new EV3LargeRegulatedMotor(MotorPort.A);

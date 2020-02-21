@@ -15,13 +15,14 @@ import lejos.hardware.Button;
 public class Main {
 
   public static Map map;
-  
+  public static LightLocalization LightSensor;
   /**
    * The main entry point.
    * 
    * @param args not used
    */
   public static void main(String[] args) {
+	
     int buttonChoice;
     new Thread(odometer).start();
     
