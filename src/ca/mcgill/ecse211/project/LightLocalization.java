@@ -21,7 +21,7 @@ public class LightLocalization {
   public static float colorData[] = new float[color.sampleSize()];
   
   public static SensorMode color2 = sideColorSensor2.getRedMode();;
-  public static float colorData2[] = new float[sideColorSensor2.sampleSize()];
+  public static float colorData2[] = new float[color2.sampleSize()];
   
   
   public static float color_indicator; // Colors indicated by a certain value from the sensor
@@ -77,12 +77,19 @@ public class LightLocalization {
     (new Thread() {
       public void run() {
     	while(true) {
-    	  if((LightLocalization.get_colorVal() <= BLK_VAL)) {
+    		
+    	  if((LightLocalization.get_colorVal() <= BLK_VAL)) 
     		  leftMotor.stop(); 
-    	  }
+    	  
     	
     	  if((LightLocalization.get_colorVal2() <= BLK_VAL))
     		  rightMotor.stop();
+    	  
+    	  if(LightLocalization.get_colorVal() <= BLK_VAL && LightLocalization.get_colorVal2() <= BLK_VAL) {
+          leftMotor.stop();
+          rightMotor.stop();
+          break;
+          }
     	
           if ((LightLocalization.get_colorVal() > BLK_VAL) && (LightLocalization.get_colorVal2() > BLK_VAL))// Maintain fwd motion til it reaches line
           {

@@ -22,7 +22,7 @@ public class Main {
    * @param args not used
    */
   public static void main(String[] args) {
-	
+	/*
     int buttonChoice;
     new Thread(odometer).start();
     
@@ -51,7 +51,10 @@ public class Main {
     while (Button.waitForAnyPress() != Button.ID_ESCAPE) {
     } // do nothing
     
-    System.exit(0);
+    System.exit(0);*/
+	Button.waitForAnyPress();
+	LightLocalization.detection();
+	LightLocalization.orientation();
   }
   
   /**
