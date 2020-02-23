@@ -25,6 +25,7 @@ public class Navigation implements Runnable {
    */
   public void run() {
     usLocalizer.localize();
+    LightLocalization.localize();
     
     int counter = 0;
     // Iterate through each waypoint in the map.
@@ -34,6 +35,7 @@ public class Navigation implements Runnable {
       counter++;
       // Relocalize every second waypoint.
       if (counter % 2 == 0) {
+        //LightLocalization.detection();
         usLocalizer.relocalize();
       }
     }
@@ -129,5 +131,17 @@ public class Navigation implements Runnable {
    */
   private static int convertDistance(double distance) {
     return (int) ((180.0 * distance) / (Math.PI * WHEEL_RAD));
+  }
+  
+  /**
+   * Sleeps for the specified duration.
+   * @param millis the duration in milliseconds
+   */
+  public static void sleepFor(long millis) {
+    try {
+      Thread.sleep(millis);
+    } catch (InterruptedException e) {
+      // Nothing to do here
+    }
   }
 }

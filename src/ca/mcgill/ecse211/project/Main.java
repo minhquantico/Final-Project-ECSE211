@@ -15,14 +15,13 @@ import lejos.hardware.Button;
 public class Main {
 
   public static Map map;
-  public static LightLocalization LightSensor;
+  
   /**
    * The main entry point.
    * 
    * @param args not used
    */
   public static void main(String[] args) {
-	/*
     int buttonChoice;
     new Thread(odometer).start();
     
@@ -51,10 +50,7 @@ public class Main {
     while (Button.waitForAnyPress() != Button.ID_ESCAPE) {
     } // do nothing
     
-    System.exit(0);*/
-	Button.waitForAnyPress();
-	LightLocalization.detection();
-	LightLocalization.orientation();
+    System.exit(0);
   }
   
   /**
@@ -64,10 +60,10 @@ public class Main {
    */
   private static int chooseTest() {
     int buttonChoice;
-    Display.showText("<  Left         |    Right  >",
-                     "                |            ",
-                     "   Color        |    Field   ",
-                     " Classification |     Test   ");
+    Display.showText("< Left  |  Right >",
+                     "        |         ",
+                     " Color  |  Field  ",
+                     "  Test  |  Test   ");
 
     do {
       buttonChoice = Button.waitForAnyPress(); // left or right press

@@ -70,8 +70,9 @@ public class UltrasonicLocalizer /*implements Runnable*/ {
     // Alpha and beta detection loop.
     while (leftMotor.isMoving() && rightMotor.isMoving()) {
       // Get the usSensor distance.
-      usSensor.fetchSample(usData, 0);
-      distance = (int) (usData[0] * 100.0);
+     /* usSensor.fetchSample(usData, 0);
+      distance = (int) (usData[0] * 100.0);*/
+      distance = (int)getFilteredDistance();
       // Update minimum if smaller distance is encountered.
       if (distance < minimum) {
         minimum = distance;
@@ -93,7 +94,7 @@ public class UltrasonicLocalizer /*implements Runnable*/ {
     }
     
     // Compute heading error.
-    deltaTheta = 225 - (beta + alpha) / 2;
+    deltaTheta = 230 - (beta + alpha) / 2; //225
     
     // Update heading accordingly.
     if (odometer.getXyt()[2] + deltaTheta >= 360) {
@@ -156,7 +157,7 @@ public class UltrasonicLocalizer /*implements Runnable*/ {
     }
     
     // Compute heading error.
-    deltaTheta = 45 - (beta + alpha) / 2;
+    deltaTheta = 49 - (beta + alpha) / 2; //45
     
     // Update heading accordingly.
     if (odometer.getXyt()[2] + deltaTheta >= 360) {
@@ -192,10 +193,10 @@ public class UltrasonicLocalizer /*implements Runnable*/ {
     }
    
     // Navigate to (1,1) coordinates.
-    navigation.travelTo(1,1); 
+    //navigation.travelTo(1,1); 
    
     // Rotate to 0 degrees.
-    navigation.turnTo(0);
+    //navigation.turnTo(0);
   }
   
   /**
