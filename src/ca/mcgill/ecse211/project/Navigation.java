@@ -71,13 +71,26 @@ public class Navigation implements Runnable {
     turnTo(finalTheta);
     
     // Compute required distance to travel.
-    double distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+   double lastDist = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
     
     // Move forward toward destination.
     leftMotor.setSpeed(FORWARD_SPEED);
     rightMotor.setSpeed(FORWARD_SPEED);
-    leftMotor.rotate(convertDistance(distance), true);
-    rightMotor.rotate(convertDistance(distance), false);
+    while(true) {
+    	leftMotor.forward();
+    	rightMotor.forward();
+    	deltaX = TILE_SIZE * x - odometer.getXyt()[0];
+        deltaY = TILE_SIZE * y - odometer.getXyt()[1];
+        double currentDist = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+        if(currentDist > lastDist) {
+        	leftMotor.setSpeed(0);
+        	rightMotor.setSpeed(0);
+        	break;
+        }
+        lastDist = currentDist;
+    	while(ColorClassifier.objectDetected);
+    	
+    }
   }
   
   /**
