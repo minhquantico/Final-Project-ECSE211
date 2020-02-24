@@ -67,7 +67,7 @@ public class Resources {
   
   public static final int SAMPLING_SIZE = 20;
   
-  public static final int OBJECT_DETECTION_THRESHOLD = 9;
+  public static final int OBJECT_DETECTION_THRESHOLD = 8;//9
   
   // Hardware resources
   /**

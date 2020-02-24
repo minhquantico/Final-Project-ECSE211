@@ -2,6 +2,7 @@ package ca.mcgill.ecse211.project;
 
 import static ca.mcgill.ecse211.project.Resources.*;
 
+
 import lejos.hardware.Button;
 import lejos.hardware.Sound;
 import lejos.hardware.sensor.SensorMode;
@@ -26,6 +27,10 @@ public class ColorClassifier implements Runnable {
   private static final double YELLOW_R_STD = 0.015;//2*0.00265903;
   private static final double ORANGE_R_MEAN = 0.09;//0.116992463;
   private static final double ORANGE_R_STD = 0.01;//2*0.002519;
+  private static final double BLUE_B_MEAN = 0.117320263;
+  private static final double BLUE_B_STD = 0.00144681;
+  private static final double GREEN_B_MEAN =0.0214052293;
+  private static final double GREEN_B_STD = 0.0008184477;
   
   private static final int DEMO_LIMIT = 5;
   
@@ -95,13 +100,16 @@ public class ColorClassifier implements Runnable {
   
   public static RingColor classifyColor() {
     double red = colorSample[0];
+    double blue=colorSample[2];
  //   double green = colorSample[1] / (colorSample[0] + colorSample[1] + colorSample[2]);
  //   double blue = colorSample[2] / (colorSample[0] + colorSample[1] + colorSample[2]);
-    if (red >= GREEN_R_MEAN - GREEN_R_STD && red <= GREEN_R_MEAN + GREEN_R_STD) {
+    if (red >= GREEN_R_MEAN - GREEN_R_STD && red <= GREEN_R_MEAN + GREEN_R_STD && blue>=GREEN_B_MEAN - GREEN_B_STD && blue<=GREEN_B_MEAN - GREEN_B_STD) {
       return RingColor.GREEN;
-    } else if (red >= BLUE_R_MEAN - BLUE_R_STD && red <= BLUE_R_MEAN + BLUE_R_STD) {
+    } 
+    else if (red >= BLUE_R_MEAN - BLUE_R_STD && red <= BLUE_R_MEAN + BLUE_R_STD && blue>=BLUE_B_MEAN - BLUE_B_STD && blue <=BLUE_B_MEAN + BLUE_B_STD) {
       return RingColor.BLUE;
-    } else if (red >= YELLOW_R_MEAN - YELLOW_R_STD && red <= YELLOW_R_MEAN + YELLOW_R_STD) {
+    } 
+    else if (red >= YELLOW_R_MEAN - YELLOW_R_STD && red <= YELLOW_R_MEAN + YELLOW_R_STD) {
       return RingColor.YELLOW;
     } else if (red >= ORANGE_R_MEAN - ORANGE_R_STD && red <= ORANGE_R_MEAN + ORANGE_R_STD) {
       return RingColor.ORANGE;
