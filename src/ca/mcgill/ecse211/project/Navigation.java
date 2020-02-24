@@ -35,8 +35,9 @@ public class Navigation implements Runnable {
       counter++;
       // Relocalize every second waypoint.
       if (counter % 2 == 0) {
-        //LightLocalization.detection();
-        usLocalizer.relocalize();
+       LightLocalization.relocalize();
+       usLocalizer.relocalize();
+       travelTo(pt.getX(), pt.getY());
       }
     }
     
@@ -129,7 +130,7 @@ public class Navigation implements Runnable {
    * @param distance the input distance
    * @return the wheel rotations necessary to cover the distance
    */
-  private static int convertDistance(double distance) {
+  public static int convertDistance(double distance) {
     return (int) ((180.0 * distance) / (Math.PI * WHEEL_RAD));
   }
   
