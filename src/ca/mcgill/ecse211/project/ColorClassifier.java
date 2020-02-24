@@ -116,10 +116,12 @@ public class ColorClassifier implements Runnable {
  //   double blue = colorSample[2] / (colorSample[0] + colorSample[1] + colorSample[2]);
  //   double green = colorSample[1] / (colorSample[0] + colorSample[1] + colorSample[2]);
  //   double blue = colorSample[2] / (colorSample[0] + colorSample[1] + colorSample[2]);
+
     if (red >= GREEN_R_MEAN - GREEN_R_STD && red <= GREEN_R_MEAN + GREEN_R_STD) {
       return RingColor.GREEN;
     } 
     else if (red >= BLUE_R_MEAN - BLUE_R_STD && red <= BLUE_R_MEAN + BLUE_R_STD) {
+
       return RingColor.BLUE;
     } 
     else if (red >= YELLOW_R_MEAN - YELLOW_R_STD && red <= YELLOW_R_MEAN + YELLOW_R_STD) {
