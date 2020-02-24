@@ -76,22 +76,22 @@ public class ColorClassifier implements Runnable {
           }
       }
       
-//      if (objectCount == DEMO_LIMIT) {
-//        lcd.drawString("Repeat Demo?", 0, 5);
-//        lcd.drawString("Left  - Yes", 0, 6);
-//        lcd.drawString("Right - No", 0, 7);
-//        int buttonChoice;
-//        do {
-//          buttonChoice = Button.waitForAnyPress(); // left or right press
-//        } while (buttonChoice != Button.ID_LEFT && buttonChoice != Button.ID_RIGHT);
-//        if (buttonChoice == Button.ID_LEFT) {
-//          objectCount = 0;
-//          lcd.clear();
-//          //continue;
-//        } else {
-//          return;
-//        }
-//      }
+      if (objectCount == DEMO_LIMIT) {
+        lcd.drawString("Repeat Demo?", 0, 5);
+        lcd.drawString("Left  - Yes", 0, 6);
+        lcd.drawString("Right - No", 0, 7);
+        int buttonChoice;
+        do {
+          buttonChoice = Button.waitForAnyPress(); // left or right press
+        } while (buttonChoice != Button.ID_LEFT && buttonChoice != Button.ID_RIGHT);
+        if (buttonChoice == Button.ID_LEFT) {
+          objectCount = 0;
+          lcd.clear();
+          //continue;
+        } else {
+          return;
+        }
+      }
     }
   }
   
