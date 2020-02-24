@@ -66,6 +66,8 @@ public class ColorClassifier implements Runnable {
           case YELLOW:
             lcd.drawString("YELLOW", 0, 1);
             break;
+          case UNKNOWN://check whether can be identified
+        	  lcd.drawString("Unknown", 0, 1);
           default:
             break;
           }
@@ -74,22 +76,22 @@ public class ColorClassifier implements Runnable {
           }
       }
       
-      if (objectCount == DEMO_LIMIT) {
-        lcd.drawString("Repeat Demo?", 0, 5);
-        lcd.drawString("Left  - Yes", 0, 6);
-        lcd.drawString("Right - No", 0, 7);
-        int buttonChoice;
-        do {
-          buttonChoice = Button.waitForAnyPress(); // left or right press
-        } while (buttonChoice != Button.ID_LEFT && buttonChoice != Button.ID_RIGHT);
-        if (buttonChoice == Button.ID_LEFT) {
-          objectCount = 0;
-          lcd.clear();
-          //continue;
-        } else {
-          return;
-        }
-      }
+//      if (objectCount == DEMO_LIMIT) {
+//        lcd.drawString("Repeat Demo?", 0, 5);
+//        lcd.drawString("Left  - Yes", 0, 6);
+//        lcd.drawString("Right - No", 0, 7);
+//        int buttonChoice;
+//        do {
+//          buttonChoice = Button.waitForAnyPress(); // left or right press
+//        } while (buttonChoice != Button.ID_LEFT && buttonChoice != Button.ID_RIGHT);
+//        if (buttonChoice == Button.ID_LEFT) {
+//          objectCount = 0;
+//          lcd.clear();
+//          //continue;
+//        } else {
+//          return;
+//        }
+//      }
     }
   }
   
@@ -103,10 +105,10 @@ public class ColorClassifier implements Runnable {
     double blue=colorSample[2];
  //   double green = colorSample[1] / (colorSample[0] + colorSample[1] + colorSample[2]);
  //   double blue = colorSample[2] / (colorSample[0] + colorSample[1] + colorSample[2]);
-    if (red >= GREEN_R_MEAN - GREEN_R_STD && red <= GREEN_R_MEAN + GREEN_R_STD && blue>=GREEN_B_MEAN - GREEN_B_STD && blue<=GREEN_B_MEAN - GREEN_B_STD) {
+    if ((red >= GREEN_R_MEAN - GREEN_R_STD && red <= GREEN_R_MEAN + GREEN_R_STD )|| (blue>=GREEN_B_MEAN - GREEN_B_STD && blue<=GREEN_B_MEAN - GREEN_B_STD)) {
       return RingColor.GREEN;
     } 
-    else if (red >= BLUE_R_MEAN - BLUE_R_STD && red <= BLUE_R_MEAN + BLUE_R_STD && blue>=BLUE_B_MEAN - BLUE_B_STD && blue <=BLUE_B_MEAN + BLUE_B_STD) {
+    else if ((red >= BLUE_R_MEAN - BLUE_R_STD && red <= BLUE_R_MEAN + BLUE_R_STD )|| (blue>=BLUE_B_MEAN - BLUE_B_STD && blue <=BLUE_B_MEAN + BLUE_B_STD)) {
       return RingColor.BLUE;
     } 
     else if (red >= YELLOW_R_MEAN - YELLOW_R_STD && red <= YELLOW_R_MEAN + YELLOW_R_STD) {
