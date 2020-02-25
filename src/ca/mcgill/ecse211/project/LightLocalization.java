@@ -102,9 +102,9 @@ public class LightLocalization {
 
       if((sensorColor1 <= BLK_VAL && rightMotorDetected) || (sensorColor2 <= BLK_VAL && leftMotorDetected)
           || sensorColor1 <= BLK_VAL && sensorColor2 <= BLK_VAL) {
-        lcd.drawString("Both detected", 0, 6);
+        //lcd.drawString("Both detected", 0, 6);
         if(isPerpendicular(odometer.getXyt()[2])) {
-          lcd.drawString("isPerpendicular", 0, 5);
+          //lcd.drawString("isPerpendicular", 0, 5);
           leftMotor.setSpeed(0);
           rightMotor.setSpeed(0);
         }
@@ -113,7 +113,7 @@ public class LightLocalization {
       if(sensorColor1 <= BLK_VAL && leftMotor.isMoving()/* && sensorColor2 > BLK_VAL*/) {
         leftMotorDetected = true;
         leftMotor.setSpeed(0);
-        lcd.drawString("LeftMotorDetected", 0, 3);
+        //lcd.drawString("LeftMotorDetected", 0, 3);
         if(!rightMotorDetected) {
           rightMotor.setSpeed(ROTATE_SPEED/3);
           if(inReverse) {
@@ -127,7 +127,7 @@ public class LightLocalization {
       if(sensorColor2 <= BLK_VAL && rightMotor.isMoving()/* && sensorColor1 > BLK_VAL*/) {
         rightMotorDetected = true;
         rightMotor.setSpeed(0);
-        lcd.drawString("RightMotorDetected", 0, 4);
+        //lcd.drawString("RightMotorDetected", 0, 4);
         if(!leftMotorDetected) {
           leftMotor.setSpeed(ROTATE_SPEED/3);
           if(inReverse) {

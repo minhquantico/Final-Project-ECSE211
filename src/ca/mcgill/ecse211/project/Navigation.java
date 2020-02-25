@@ -3,6 +3,7 @@ package ca.mcgill.ecse211.project;
 import static ca.mcgill.ecse211.project.Resources.*;
 
 import ca.mcgill.ecse211.project.Map.Waypoint;
+import lejos.hardware.Sound;
 
 public class Navigation implements Runnable {
   
@@ -41,6 +42,16 @@ private float[] usData = new float[usSensor.sampleSize()];
     
     // Rotate to 0 degrees.
     turnTo(0);
+    
+    Sound.beep();
+    Sound.beep();
+    Sound.beep();
+    
+    lcd.clear();
+    lcd.drawString("Nb. of donuts: " + ColorClassifier.listOfDonuts.size(), 0, 0);
+    for(int i = 0; i < ColorClassifier.listOfDonuts.size(); i++) {
+    lcd.drawString(ColorClassifier.listOfDonuts.get(i), 0, i + 1);
+    }
   }
   
   /**
@@ -84,7 +95,7 @@ private float[] usData = new float[usSensor.sampleSize()];
     leftMotor.forward();
     rightMotor.forward();
     double distanceTraveled = 0;
-    lcd.drawString("Is moving: "+leftMotor.isMoving(), 0, 4);
+    //lcd.drawString("Is moving: "+leftMotor.isMoving(), 0, 4);
     lcd.clear();
     while((leftMotor.isMoving() || rightMotor.isMoving()) && distanceTraveled < distance) {
     	
@@ -93,8 +104,8 @@ private float[] usData = new float[usSensor.sampleSize()];
         double deltaXf = odometer.getXyt()[0]-xi;
         double deltaYf = odometer.getXyt()[1]-yi;
         distanceTraveled = Math.sqrt(deltaXf*deltaXf + deltaYf*deltaYf);
-        lcd.drawString("distancet" + distanceTraveled, 0, 1);
-        lcd.drawString("distance " + distance, 0, 2);
+        //lcd.drawString("distancet" + distanceTraveled, 0, 1);
+        //lcd.drawString("distance " + distance, 0, 2);
     	if(objectDistance <= 3*OBJECT_DETECTION_THRESHOLD) {
     		if(objectDistance <= OBJECT_DETECTION_THRESHOLD) {
             	leftMotor.setSpeed(0);

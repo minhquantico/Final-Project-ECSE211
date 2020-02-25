@@ -2,6 +2,7 @@ package ca.mcgill.ecse211.project;
 
 import static ca.mcgill.ecse211.project.Resources.*;
 
+import java.util.ArrayList;
 
 import lejos.hardware.Button;
 import lejos.hardware.Sound;
@@ -12,6 +13,7 @@ public class ColorClassifier{
   public static SensorMode color = frontColorSensor.getRGBMode();;
   public static float[] colorSample = new float[color.sampleSize()];
   public static boolean objectDetected = false;
+  public static ArrayList<String> listOfDonuts = new ArrayList<String>();
   
   private static double objectDistance = usLocalizer.getFilteredDistance();
   
@@ -34,9 +36,9 @@ public class ColorClassifier{
   private static final double GREEN_R_MEAN = 0.05436523;//0.062581700;
   private static final double GREEN_R_STD = 0.01220633;//2*0.00143804;
   private static final double YELLOW_R_MEAN = 0.15095626;//0.09812091683;
-  private static final double YELLOW_R_STD = 0.0306428;//2*0.00265903;
-  private static final double ORANGE_R_MEAN = 0.095048288;//0.116992463;
-  private static final double ORANGE_R_STD = 0.025096;//2*0.002519;
+  private static final double YELLOW_R_STD = 0.0256428;//2*0.00265903;
+  private static final double ORANGE_R_MEAN = 0.097048288;//0.116992463;
+  private static final double ORANGE_R_STD = 0.026096;//2*0.002519;
   
 //  private static final double BLUE_B_MEAN = 0.117320263;
 //  private static final double BLUE_B_STD = 0.00144681;
@@ -63,19 +65,22 @@ public class ColorClassifier{
         lcd.drawString("Object Detected", 0, 0);
         lcd.drawString("" + colorSample[0], 0, 5);
         objectCount++;
-        
         switch(ringColor) {
           case GREEN:
             lcd.drawString("GREEN", 0, 1);
+            listOfDonuts.add("Green");
             break;
           case BLUE:
             lcd.drawString("BLUE", 0, 1);
+            listOfDonuts.add("Blue");
             break;
           case ORANGE:
             lcd.drawString("ORANGE", 0, 1);
+            listOfDonuts.add("Orange");
             break;
           case YELLOW:
             lcd.drawString("YELLOW", 0, 1);
+            listOfDonuts.add("Yellow");
             break;
           case UNKNOWN:
         	lcd.drawString("UNKNOWN", 0, 1);
@@ -148,17 +153,21 @@ public class ColorClassifier{
 	        lcd.drawString("" + colorSample[0], 0, 5);
 
 	        switch(ringColor) {
-	          case GREEN:
+	        case GREEN:
 	            lcd.drawString("GREEN", 0, 1);
+	            listOfDonuts.add("Green");
 	            break;
 	          case BLUE:
 	            lcd.drawString("BLUE", 0, 1);
+	            listOfDonuts.add("Blue");
 	            break;
 	          case ORANGE:
 	            lcd.drawString("ORANGE", 0, 1);
+	            listOfDonuts.add("Orange");
 	            break;
 	          case YELLOW:
 	            lcd.drawString("YELLOW", 0, 1);
+	            listOfDonuts.add("Yellow");
 	            break;
 	          case UNKNOWN:
 	        	lcd.drawString("UNKNOWN", 0, 1);
