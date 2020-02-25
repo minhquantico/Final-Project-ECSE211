@@ -1,14 +1,6 @@
 package ca.mcgill.ecse211.project;
 
-import static ca.mcgill.ecse211.project.Resources.BASE_WIDTH;
-import static ca.mcgill.ecse211.project.Resources.FORWARD_SPEED;
-import static ca.mcgill.ecse211.project.Resources.ROTATE_SPEED;
-import static ca.mcgill.ecse211.project.Resources.TILE_SIZE;
-import static ca.mcgill.ecse211.project.Resources.WHEEL_RAD;
-import static ca.mcgill.ecse211.project.Resources.leftMotor;
-import static ca.mcgill.ecse211.project.Resources.odometer;
-import static ca.mcgill.ecse211.project.Resources.rightMotor;
-import static ca.mcgill.ecse211.project.Resources.usLocalizer;
+import static ca.mcgill.ecse211.project.Resources.*;
 
 import ca.mcgill.ecse211.project.Map.Waypoint;
 
@@ -18,6 +10,7 @@ public class Navigation implements Runnable {
    * The map that will contain all the waypoints.
    */
   public Map map;
+private float[] usData = new float[usSensor.sampleSize()];
   
   /**
    * This method directs the robot to travel to each waypoint in the map.
@@ -32,6 +25,11 @@ public class Navigation implements Runnable {
     for (Waypoint pt : map.getMap()) {
       // Travel to each waypoint.
       travelTo(pt.getX(), pt.getY());
+      while(ColorClassifier.objectDetected) {
+    	  Navigation.sleepFor(10000);
+    	  ColorClassifier.objectDetected = false;
+    	  travelTo(pt.getX(), pt.getY());
+      }
       counter++;
       // Relocalize every second waypoint.
       if (counter % 2 == 0) {
@@ -60,10 +58,13 @@ public class Navigation implements Runnable {
    * @param y vertical coordinates in tile size.
    */
   public void travelTo(int x, int y) {
-    
+    lcd.clear();
     // Compute required changes in x and y.
     double deltaX = TILE_SIZE * x - odometer.getXyt()[0];
     double deltaY = TILE_SIZE * y - odometer.getXyt()[1];
+    
+    double xi = odometer.getXyt()[0];
+    double yi = odometer.getXyt()[1];
     
     double finalTheta = Math.toDegrees(Math.atan2(deltaX, deltaY));
     
@@ -71,26 +72,47 @@ public class Navigation implements Runnable {
     turnTo(finalTheta);
     
     // Compute required distance to travel.
-   double lastDist = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+   double distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
     
     // Move forward toward destination.
     leftMotor.setSpeed(FORWARD_SPEED);
-    rightMotor.setSpeed(FORWARD_SPEED);
-    while(true) {
-    	leftMotor.forward();
-    	rightMotor.forward();
-    	deltaX = TILE_SIZE * x - odometer.getXyt()[0];
-        deltaY = TILE_SIZE * y - odometer.getXyt()[1];
-        double currentDist = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-        if(currentDist > lastDist) {
-        	leftMotor.setSpeed(0);
-        	rightMotor.setSpeed(0);
-        	break;
-        }
-        lastDist = currentDist;
-    	while(ColorClassifier.objectDetected);
+    rightMotor.setSpeed(FORWARD_SPEED);    
+    
+    //leftMotor.rotate(convertDistance(distance), true);
+    //rightMotor.rotate(convertDistance(distance), false);
+    
+    leftMotor.forward();
+    rightMotor.forward();
+    double distanceTraveled = 0;
+    lcd.drawString("Is moving: "+leftMotor.isMoving(), 0, 4);
+    lcd.clear();
+    while((leftMotor.isMoving() || rightMotor.isMoving()) && distanceTraveled < distance) {
     	
+    	
+        double objectDistance = usLocalizer.getFilteredDistance();
+        double deltaXf = odometer.getXyt()[0]-xi;
+        double deltaYf = odometer.getXyt()[1]-yi;
+        distanceTraveled = Math.sqrt(deltaXf*deltaXf + deltaYf*deltaYf);
+        lcd.drawString("distancet" + distanceTraveled, 0, 1);
+        lcd.drawString("distance " + distance, 0, 2);
+    	if(objectDistance <= 3*OBJECT_DETECTION_THRESHOLD) {
+    		if(objectDistance <= OBJECT_DETECTION_THRESHOLD) {
+            	leftMotor.setSpeed(0);
+            	rightMotor.setSpeed(0);
+        		ColorClassifier.colorDetection();
+        		break;
+    		}
+//    		else {
+//    			leftMotor.setSpeed(FORWARD_SPEED/2);
+//    			rightMotor.setSpeed(FORWARD_SPEED/2);
+//    		}
+    	}
     }
+    
+    leftMotor.setSpeed(0);
+	rightMotor.setSpeed(0);
+    
+    
   }
   
   /**

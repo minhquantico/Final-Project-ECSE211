@@ -22,12 +22,12 @@ public class Resources {
   /**
    * The wheel radius in centimeters.
    */
-  public static final double WHEEL_RAD = 2.175;//2.13;
+  public static final double WHEEL_RAD = 2.102;//2.13;
   
   /**
    * The robot width in centimeters.
    */
-  public static final double BASE_WIDTH = 15.9;//15.6;
+  public static final double BASE_WIDTH = 14.75;//15.6;
   
   /**
    * The speed at which the robot moves forward in degrees per second.
@@ -65,9 +65,9 @@ public class Resources {
    */
   public static final double MINIMUM_EDGE_SEPARATION = 85;
   
-  public static final int SAMPLING_SIZE = 20;
+  public static final int SAMPLING_SIZE = 10;
   
-  public static final int OBJECT_DETECTION_THRESHOLD = 10;//9
+  public static final int OBJECT_DETECTION_THRESHOLD = 9;//9
   
   // Hardware resources
   /**

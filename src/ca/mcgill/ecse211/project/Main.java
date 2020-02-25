@@ -46,7 +46,6 @@ public class Main {
     
     new Thread(new Display()).start();
     new Thread(navigation).start();
-    new Thread(new ColorClassifier()).start();
     while (Button.waitForAnyPress() != Button.ID_ESCAPE) {
     } // do nothing
     

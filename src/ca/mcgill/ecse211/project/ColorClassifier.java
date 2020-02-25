@@ -7,7 +7,7 @@ import lejos.hardware.Button;
 import lejos.hardware.Sound;
 import lejos.hardware.sensor.SensorMode;
 
-public class ColorClassifier implements Runnable {
+public class ColorClassifier{
   
   public static SensorMode color = frontColorSensor.getRGBMode();;
   public static float[] colorSample = new float[color.sampleSize()];
@@ -34,14 +34,14 @@ public class ColorClassifier implements Runnable {
   private static final double GREEN_R_MEAN = 0.05436523;//0.062581700;
   private static final double GREEN_R_STD = 0.01220633;//2*0.00143804;
   private static final double YELLOW_R_MEAN = 0.15095626;//0.09812091683;
-  private static final double YELLOW_R_STD = 0.0406428;//2*0.00265903;
+  private static final double YELLOW_R_STD = 0.0306428;//2*0.00265903;
   private static final double ORANGE_R_MEAN = 0.095048288;//0.116992463;
-  private static final double ORANGE_R_STD = 0.0155896;//2*0.002519;
+  private static final double ORANGE_R_STD = 0.025096;//2*0.002519;
   
-  private static final double BLUE_B_MEAN = 0.117320263;
-  private static final double BLUE_B_STD = 0.00144681;
-  private static final double GREEN_B_MEAN = 0.0214052293;
-  private static final double GREEN_B_STD = 0.0008184477;
+//  private static final double BLUE_B_MEAN = 0.117320263;
+//  private static final double BLUE_B_STD = 0.00144681;
+//  private static final double GREEN_B_MEAN = 0.0214052293;
+//  private static final double GREEN_B_STD = 0.0008184477;
   
   private static final int DEMO_LIMIT = 5;
   
@@ -134,29 +134,19 @@ public class ColorClassifier implements Runnable {
     }
   }
   
-  public void run() {
-	  lcd.clear();
-	    int objectCount = 0;
-	    while (true) {
-
-	      //lcd.clear();
-	      
-	      color.fetchSample(colorSample, 0);      
-	      objectDistance = usLocalizer.getFilteredDistance();
-
+  public static void colorDetection() {
+      Sound.playTone(400, 300, 35);
+      Sound.playTone(500, 300, 5);
+	    while (!objectDetected) {
+	    	color.fetchSample(colorSample, 0);
 	      RingColor ringColor = classifyColor();
-	      if (ringColor != RingColor.UNKNOWN && objectDistance <= OBJECT_DETECTION_THRESHOLD) {  
-		    leftMotor.setSpeed(0);
-		    rightMotor.setSpeed(0);
-	    	objectDetected = true;
-	    	lcd.clear();
-	       Sound.playTone(400, 300, 35);
-	       Sound.playTone(500, 300, 5);
+	      if (ringColor != RingColor.UNKNOWN) {  
+	    	  objectDetected = true;
+
 	      
 	        lcd.drawString("Object Detected", 0, 0);
 	        lcd.drawString("" + colorSample[0], 0, 5);
-	        objectCount++;
-	        
+
 	        switch(ringColor) {
 	          case GREEN:
 	            lcd.drawString("GREEN", 0, 1);
@@ -172,22 +162,9 @@ public class ColorClassifier implements Runnable {
 	            break;
 	          case UNKNOWN:
 	        	lcd.drawString("UNKNOWN", 0, 1);
+	        	break;
 	          default:
 	            break;
-	          }
-	       
-	        try {
-				Thread.sleep(10000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-	        leftMotor.setSpeed(FORWARD_SPEED);
-	        rightMotor.setSpeed(FORWARD_SPEED);
-	        Main.sleepFor(10000);
-	        objectDetected = false;
-	          while (objectDistance <= 2 * OBJECT_DETECTION_THRESHOLD) {
-	            objectDistance = usLocalizer.getFilteredDistance();
 	          }
 	      }
 	    }
