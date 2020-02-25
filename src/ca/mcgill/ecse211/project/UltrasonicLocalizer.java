@@ -70,8 +70,6 @@ public class UltrasonicLocalizer /*implements Runnable*/ {
     // Alpha and beta detection loop.
     while (leftMotor.isMoving() && rightMotor.isMoving()) {
       // Get the usSensor distance.
-     /* usSensor.fetchSample(usData, 0);
-      distance = (int) (usData[0] * 100.0);*/
       distance = (int)getFilteredDistance();
       // Update minimum if smaller distance is encountered.
       if (distance < minimum) {
@@ -183,6 +181,7 @@ public class UltrasonicLocalizer /*implements Runnable*/ {
   public void localize() {
     usSensor.fetchSample(usData, 0);
     distance = (int) (usData[0] * 100.0);
+    //System.out.println("distance " + distance);
     
     if (distance < WALL_DIST_THRESHOLD - NOISE_MARGIN) {
       // Use rising edge localization if starting by facing a wall.
@@ -213,6 +212,12 @@ public class UltrasonicLocalizer /*implements Runnable*/ {
     odometer.setX(getFilteredDistance());
   }
   
+  /**
+   * Takes an average of a SAMPLE_SIZE number of samples from 
+   * the ultrasonic sensor distance readings.
+   * 
+   * @return average of a SAMPLE_SIZE number of distance samples.
+   */
   public double getFilteredDistance() {
     double sum = 0;
     for (int  i = 0; i < SAMPLING_SIZE; i++) {

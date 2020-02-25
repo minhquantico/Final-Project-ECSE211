@@ -25,6 +25,7 @@ public class Main {
     int buttonChoice;
     new Thread(odometer).start();
     
+    // Choose the type of demo.
     buttonChoice = chooseTest();
     if (buttonChoice == Button.ID_LEFT) {
       ColorClassifier.colorTest();

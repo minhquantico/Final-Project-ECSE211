@@ -1,6 +1,16 @@
 package ca.mcgill.ecse211.project;
 
-import static ca.mcgill.ecse211.project.Resources.*;
+import static ca.mcgill.ecse211.project.Resources.BASE_WIDTH;
+import static ca.mcgill.ecse211.project.Resources.FORWARD_SPEED;
+import static ca.mcgill.ecse211.project.Resources.OBJECT_DETECTION_THRESHOLD;
+import static ca.mcgill.ecse211.project.Resources.ROTATE_SPEED;
+import static ca.mcgill.ecse211.project.Resources.TILE_SIZE;
+import static ca.mcgill.ecse211.project.Resources.WHEEL_RAD;
+import static ca.mcgill.ecse211.project.Resources.lcd;
+import static ca.mcgill.ecse211.project.Resources.leftMotor;
+import static ca.mcgill.ecse211.project.Resources.odometer;
+import static ca.mcgill.ecse211.project.Resources.rightMotor;
+import static ca.mcgill.ecse211.project.Resources.usLocalizer;
 
 import ca.mcgill.ecse211.project.Map.Waypoint;
 import lejos.hardware.Sound;
@@ -11,7 +21,6 @@ public class Navigation implements Runnable {
    * The map that will contain all the waypoints.
    */
   public Map map;
-private float[] usData = new float[usSensor.sampleSize()];
   
   /**
    * This method directs the robot to travel to each waypoint in the map.
@@ -26,17 +35,13 @@ private float[] usData = new float[usSensor.sampleSize()];
     for (Waypoint pt : map.getMap()) {
       // Travel to each waypoint.
       travelTo(pt.getX(), pt.getY());
-      while(ColorClassifier.objectDetected) {
-    	  Navigation.sleepFor(10000);
-    	  ColorClassifier.objectDetected = false;
-    	  travelTo(pt.getX(), pt.getY());
-      }
       counter++;
       // Relocalize every second waypoint.
       if (counter % 2 == 0) {
-       LightLocalization.relocalize();
-       usLocalizer.relocalize();
-       travelTo(pt.getX(), pt.getY());
+        LightLocalization.relocalize();
+        sleepFor(1000);
+        usLocalizer.relocalize();
+        travelTo(pt.getX(), pt.getY());
       }
     }
     
@@ -49,8 +54,8 @@ private float[] usData = new float[usSensor.sampleSize()];
     
     lcd.clear();
     lcd.drawString("Nb. of donuts: " + ColorClassifier.listOfDonuts.size(), 0, 0);
-    for(int i = 0; i < ColorClassifier.listOfDonuts.size(); i++) {
-    lcd.drawString(ColorClassifier.listOfDonuts.get(i), 0, i + 1);
+    for (int i = 0; i < ColorClassifier.listOfDonuts.size(); i++) {
+      lcd.drawString(ColorClassifier.listOfDonuts.get(i), 0, i + 1);
     }
   }
   
@@ -82,48 +87,42 @@ private float[] usData = new float[usSensor.sampleSize()];
     // Turn to required heading.
     turnTo(finalTheta);
     
-    // Compute required distance to travel.
-   double distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-    
     // Move forward toward destination.
     leftMotor.setSpeed(FORWARD_SPEED);
     rightMotor.setSpeed(FORWARD_SPEED);    
     
-    //leftMotor.rotate(convertDistance(distance), true);
-    //rightMotor.rotate(convertDistance(distance), false);
-    
     leftMotor.forward();
     rightMotor.forward();
+    
     double distanceTraveled = 0;
-    //lcd.drawString("Is moving: "+leftMotor.isMoving(), 0, 4);
+
+    //Compute required distance to travel.
+    double distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+    
     lcd.clear();
-    while((leftMotor.isMoving() || rightMotor.isMoving()) && distanceTraveled < distance) {
-    	
-    	
-        double objectDistance = usLocalizer.getFilteredDistance();
-        double deltaXf = odometer.getXyt()[0]-xi;
-        double deltaYf = odometer.getXyt()[1]-yi;
-        distanceTraveled = Math.sqrt(deltaXf*deltaXf + deltaYf*deltaYf);
-        //lcd.drawString("distancet" + distanceTraveled, 0, 1);
-        //lcd.drawString("distance " + distance, 0, 2);
-    	if(objectDistance <= 3*OBJECT_DETECTION_THRESHOLD) {
-    		if(objectDistance <= OBJECT_DETECTION_THRESHOLD) {
-            	leftMotor.setSpeed(0);
-            	rightMotor.setSpeed(0);
-        		ColorClassifier.colorDetection();
-        		break;
-    		}
-//    		else {
-//    			leftMotor.setSpeed(FORWARD_SPEED/2);
-//    			rightMotor.setSpeed(FORWARD_SPEED/2);
-//    		}
-    	}
+    // Object detection routine.
+    while (distanceTraveled < distance) {
+      double objectDistance = usLocalizer.getFilteredDistance();
+      double deltaXf = odometer.getXyt()[0] - xi;
+      double deltaYf = odometer.getXyt()[1] - yi;
+      distanceTraveled = Math.sqrt(deltaXf * deltaXf + deltaYf * deltaYf);
+      if (objectDistance <= OBJECT_DETECTION_THRESHOLD) {
+        leftMotor.setSpeed(0);
+        rightMotor.setSpeed(0);
+        ColorClassifier.colorDetection();
+        if (ColorClassifier.objectDetected) {
+          Navigation.sleepFor(5000);
+          ColorClassifier.objectDetected = false;
+        }
+        leftMotor.setSpeed(FORWARD_SPEED);
+        rightMotor.setSpeed(FORWARD_SPEED);
+        leftMotor.forward();
+        rightMotor.forward();
+      }
     }
     
     leftMotor.setSpeed(0);
-	rightMotor.setSpeed(0);
-    
-    
+    rightMotor.setSpeed(0);
   }
   
   /**

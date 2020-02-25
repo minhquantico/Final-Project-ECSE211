@@ -16,7 +16,6 @@ public class Map {
   /**
    * Constructor to initialize one of the four bonus or one of the four regular set of waypoints.
    * 
-   * @param bonus boolean to initilaize map for bonus demo.
    * @param index integer to select one of the predefined maps (1-4).
    */
   public Map(int index) {

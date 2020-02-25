@@ -27,13 +27,12 @@ public class Resources {
   /**
    * The robot width in centimeters.
    */
-  public static final double BASE_WIDTH = 15.1; //localization
-  //public static final double BASE_WIDTH2 = 15.6;//15.6;14.75 //turn
+  public static final double BASE_WIDTH = 14.75;//15.1; //localization
   
   /**
    * The speed at which the robot moves forward in degrees per second.
    */
-  public static final int FORWARD_SPEED = 240;
+  public static final int FORWARD_SPEED = 180;
   
   /**
    * The speed at which the robot rotates in degrees per second.
@@ -54,7 +53,7 @@ public class Resources {
    * The distance in centimeters from the ultrasonic sensor and the axis of rotation of the
    * robot's wheel base.
    */
-  public static final double SENSOR_LENGTH_OFFSET = 4.5;
+  public static final double SENSOR_LENGTH_OFFSET = 4.5;//4.5;
   
   /**
    * The tile size in centimeters. Note that 30.48 cm = 1 ft.
@@ -66,9 +65,15 @@ public class Resources {
    */
   public static final double MINIMUM_EDGE_SEPARATION = 85;
   
+  /**
+   * The number of samples to poll when taking an average US reading.
+   */
   public static final int SAMPLING_SIZE = 10;
   
-  public static final int OBJECT_DETECTION_THRESHOLD = 9;//9
+  /**
+   * The distance to detect incoming objects.
+   */
+  public static final int OBJECT_DETECTION_THRESHOLD = 9;
   
   // Hardware resources
   /**
@@ -86,9 +91,16 @@ public class Resources {
    */
   public static EV3ColorSensor frontColorSensor = new EV3ColorSensor(SensorPort.S2);
   
+  /**
+   * The left color sensor.
+   */
   public static EV3ColorSensor sideColorSensor1 = new EV3ColorSensor(SensorPort.S3);
   
+  /**
+   * The right color sensor.
+   */
   public static EV3ColorSensor sideColorSensor2 = new EV3ColorSensor(SensorPort.S4);
+  
   /**
    * The left motor.
    */
